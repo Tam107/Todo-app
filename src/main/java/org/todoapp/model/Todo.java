@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "todo")
 public class Todo {
 
     @Id

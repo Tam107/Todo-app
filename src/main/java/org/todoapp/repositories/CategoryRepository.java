@@ -16,6 +16,8 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
+
     List<Category> findCategoriesByUserId(Long userId);
 
     @Query("select t.category.id from Todo t where t.id = :todoId")

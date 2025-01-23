@@ -1,6 +1,5 @@
 package org.todoapp.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +26,8 @@ public class CategoryDto {
 
     private List<TodoDto> todoList;
 
-    public static Category toEntity(CategoryDto categoryDto){
+    // Convert DTO to Entity
+    public static Category toEntity(CategoryDto categoryDto) {
         Category category = new Category();
 
         category.setUser(UserDto.toEntity(categoryDto.getUser()));
@@ -38,6 +38,7 @@ public class CategoryDto {
         return category;
     }
 
+    // Convert Entity to DTO
     public static CategoryDto fromEntity(Category category) {
         return CategoryDto.builder()
                 .id(category.getId())

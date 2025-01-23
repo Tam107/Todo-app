@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.todoapp.dto.CategoryDto;
-import org.todoapp.exception.InvalidEntityException;
+import org.todoapp.dto.UserDto;
+import org.todoapp.model.Category;
 import org.todoapp.repositories.CategoryRepository;
 import org.todoapp.services.CategoryService;
 import org.todoapp.validators.CategoryValidator;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findAll() {
-
+        // Fetch the page of entities
         return categoryRepository.findAll().stream()
                 .map(CategoryDto::fromEntity)
                 .collect(Collectors.toList());
@@ -69,6 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         if (id == null) {
             log.error("Category id is null");

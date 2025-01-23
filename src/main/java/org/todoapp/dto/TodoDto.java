@@ -1,5 +1,6 @@
 package org.todoapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,10 +27,11 @@ public class TodoDto {
 
     private boolean favourite;
 
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private CategoryDto category;
 
-    //post and update request
-    public static Todo toEntity(TodoDto todoDto){
+    // Convert DTO to Entity
+    public static Todo toEntity(TodoDto todoDto) {
         final Todo todo = new Todo();
 
         todo.setId(todoDto.getId());
@@ -43,8 +45,8 @@ public class TodoDto {
         return todo;
     }
 
-    // get request
-    public static TodoDto fromEntity(Todo todo){
+    // Convert Entity to DTO
+    public static TodoDto fromEntity(Todo todo) {
         return TodoDto.builder()
                 .id(todo.getId())
                 .title(todo.getTitle())
@@ -52,7 +54,7 @@ public class TodoDto {
                 .startDate(todo.getStartDate())
                 .done(todo.isDone())
                 .favourite(todo.isFavorite())
+                .category(CategoryDto.fromEntity(todo.getCategory()))
                 .build();
     }
-
 }

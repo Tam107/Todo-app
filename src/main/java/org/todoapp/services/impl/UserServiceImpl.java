@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
         List<String> errors = UserValidator.validateUser(user);
         if (!errors.isEmpty()){
             log.info("User is not valid {}", user);
-            throw new InvalidEntityException("User is not valid");
         }
 
         return UserDto.fromEntity(userRepository.save(UserDto.toEntity(user)));

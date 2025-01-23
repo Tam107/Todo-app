@@ -1,17 +1,15 @@
 package org.todoapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.todoapp.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserDto {
@@ -28,10 +26,11 @@ public class UserDto {
 
     private String password;
 
-    @JsonIgnore
-    private List<CategoryDto> category;
+    @JsonIgnore // Exclude this field from serialization if needed
+    private List<CategoryDto> category;  // Excluding this field from serialization
 
-    public static User toEntity(UserDto userDto){
+    // Convert DTO to Entity
+    public static User toEntity(UserDto userDto) {
         final User user = new User();
 
         user.setId(userDto.getId());
@@ -43,9 +42,11 @@ public class UserDto {
         user.setCategory(
                 userDto.getCategory() != null ? userDto.getCategory().stream().map(CategoryDto::toEntity).collect(Collectors.toList()) : null
         );
+
         return user;
     }
 
+    // Convert Entity to DTO
     public static UserDto fromEntity(User user) {
         return UserDto.builder()
                 .id(user.getId())
@@ -54,9 +55,29 @@ public class UserDto {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .email(user.getEmail())
+
+                // Handling the category list if it's not null
                 .category(
                         user.getCategory() != null ? user.getCategory().stream().map(CategoryDto::fromEntity).collect(Collectors.toList()) : null
                 )
                 .build();
+    }
+
+    @JsonCreator
+    public UserDto(
+            @JsonProperty("id") Long id,
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("email") String email,
+            @JsonProperty("username") String username,
+            @JsonProperty("password") String password,
+            @JsonProperty("category") List<CategoryDto> category) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.category = category;
     }
 }

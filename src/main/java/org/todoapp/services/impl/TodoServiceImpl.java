@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
 
-    private TodoRepository todoRepository;
+    private final TodoRepository todoRepository;
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -81,11 +81,16 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<TodoDto> findByCategory(Long id) {
-        return List.of();
+        return todoRepository.findById(id).stream()
+                .map(TodoDto::fromEntity).collect(Collectors.toList());
     }
 
     @Override
     public void delete(Long id) {
-
+        if(id == null){
+            log.info("Cannot delete since the id is null");
+            return;
+        }
+        todoRepository.deleteById(id);
     }
 }

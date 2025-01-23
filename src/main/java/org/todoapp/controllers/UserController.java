@@ -34,7 +34,7 @@ public class UserController {
                                            @RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "20") int size){
         log.info("Get user list.....");
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page-1, size);
 
         // Add filtering logic if needed
         Page<UserDto> userPage = (keyword != null && !keyword.isEmpty()) ? userService.findAllByKeyword(keyword, pageable)
@@ -80,10 +80,10 @@ public class UserController {
 
     @PutMapping("/update")
     @Operation(summary = "Update user API")
-    public Map<String, Object> updateUser(@RequestBody UserDto user){
+    public Map<String, Object> updateUser(@RequestBody UserDto user) throws Exception {
         log.info("Update user {}", user);
 
-        UserDto updatedUser = userService.update(user);
+        UserDto updatedUser = userService.save(user);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("status", HttpStatus.ACCEPTED.value());
